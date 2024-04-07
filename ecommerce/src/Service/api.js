@@ -1,3 +1,11 @@
 import axios from 'axios' ;
- 
-export 
+
+const URL = 'http://localhost:8000';
+
+export const auhtenticteSignUp = async(data) =>{
+    try {
+        await axios.post(`${URL}/signup` , data); 
+    } catch (error) {
+        console.log("Error while calling the signup api (api.js)"   , error)
+    }
+}
