@@ -1,6 +1,8 @@
 import {Dialog , Box , TextField , Typography , styled , Button} from '@mui/material';
 import React from 'react'
-import { useState } from 'react';
+import { useState , useContext} from 'react';
+import { auhtenticteSignUp } from '../../Service/api';
+import { DataContext } from '../../Context/DataProvider';
 
 
 const Component =  styled(Box)`
@@ -114,6 +116,8 @@ const Login = ({open , setOpen}) => {
 const [account , toggleaccount] = useState(accountInitialviews.Login)
  const [signup , setsignup] = useState(signupinitial)
 
+ const { setAccount} = useContext(DataContext);
+
 
 const handleClose = () => {
   setOpen(false);
@@ -130,12 +134,16 @@ setsignup({...signup , [e.target.name] : e.target.value})
 console.log(signup);
 }
 
-const signupUser = () => {
+const signupUser = async() => {
+   let response = await auhtenticteSignUp(signup)
+   if(!response){return;}
+   handleClose();
+   setAccount(signup.firstname);
   
 }
 
 return (
-
+   
      <Dialog open = {open} onClose={handleClose}>
        <Component>
         <Box style={{display : 'flex' , height:'100%' , width:'80%'}}>
@@ -155,7 +163,7 @@ return (
                   <br />
                   <Loginbutton>Login</Loginbutton>
                   <br />
-                  < Typography style={{marginLeft:'110px' }}>OR</ Typography>
+                  < Typography style={{marginLeft:'80px' }}>OR</ Typography>
                   <br />
                   <RequestOTP>Request OTP</RequestOTP>
                   <CreateAccount onClick={() => togglesignup()}>New to Flipkart? Create an account</CreateAccount>
@@ -168,7 +176,7 @@ return (
                   <TextField variant="standard" onChange={(e) => onInputChange(e)} name='email' label='Enter Email' />
                   <TextField variant="standard" onChange={(e) => onInputChange(e)} name='password' label='Enter Password' />
                   <TextField variant="standard" onChange={(e) => onInputChange(e)} name='phone' label='Enter Phone'  />
-                  <LoginButton onClick={() => signipUser()}>Continue</LoginButton>
+                  <LoginButton onClick={() => signupUser()}>Continue</LoginButton>
           </Wrapper >
               }
         </Box>
